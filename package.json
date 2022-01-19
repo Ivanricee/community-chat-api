@@ -1,0 +1,25 @@
+{
+  "name": "Discord-Server",
+  "version": "1.0.0",
+  "description": "MongoDB with React apollo server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-core": "^3.6.2",
+    "apollo-server-express": "^3.6.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "graphql": "^16.2.0"
+  },
+  "devDependencies": {
+    "consola": "^2.15.3",
+    "dotenv": "^14.2.0",
+    "nodemon": "^2.0.15"
+  }
+}
