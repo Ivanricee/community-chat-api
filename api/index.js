@@ -35,13 +35,25 @@ const typeDefs = gql`
     path: String
     channels: [Channel]
   }
+  # users queryable fields
+
+  type Users {
+    _id: ID
+    name: String
+    role: String
+    img: String
+  }
   # comments querysable fields
   type Comment {
     _id: ID
     texto: String
     img: String
+    date: String
     url: String
-    react: [[String]]
+    react: [String]
+    _id_comment_reply: ID
+    _id_user: ID
+    user: Users
   }
   type CComment {
     _id_channel: ID
@@ -60,7 +72,7 @@ const typeDefs = gql`
   }
 `;
 // 2 Data source
-
+const cloudinaryFetch ="https://res.cloudinary.com/demo/image/fetch/q_auto/";
 const servers = [
   {
     _id: "1",
@@ -68,7 +80,7 @@ const servers = [
     img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
     alt: "server, ivanrice",
     content: "8",
-    path: "/1/1",
+    path: "/1",
     channels: [
       {
         title: "- Welcome and rules",
@@ -228,27 +240,53 @@ const servers = [
     img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/hg_logo_idpz31.png",
     alt: "server, healthy gamer gg",
     content: "61",
-    path: "/2/1",
+    path: "/2",
     channels: [
       {
         title: "- Welcome and rules",
         _id: "1",
         summary: [
           {
-            _id: "2",
+            _id: "1",
             title: "announcements",
-            to: "/2/2",
+            to: "/2/1",
             notification: "0",
           },
           {
-            _id: "3",
+            _id: "2",
             title: "calendar",
-            to: "/2/3",
+            to: "/2/2",
             notification: "9",
           },
         ],
       },
     ],
+  },
+];
+const users = [
+  {
+    _id: "1",
+    name: "ivanrice",
+    role: "1",
+    img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
+  },
+  {
+    _id: "2",
+    name: "Dr k",
+    role: "2",
+    img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
+  },
+  {
+    _id: "3",
+    name: "otro user",
+    role: "3",
+    img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
+  },
+  {
+    _id: "4",
+    name: "otro 4",
+    role: "4",
+    img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
   },
 ];
 const commentsChannel = [
@@ -261,17 +299,64 @@ const commentsChannel = [
         comments: [
           {
             _id: "1",
-            texto: "Comentario uno",
-            img: "",
+            texto:
+              "Comentario uno asd f d s d f sdfsdfsdfsdfsd sdfsdfsd werwefsd  sdfsdfsdfsdf sdfsdfsdf ssf dfsdfsdfsdf sdfwgfdghgy j grgf e fgerfg",
+            img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg`,
+            date: "28/01/2022",
             url: "",
-            react: ["emoji1", "emoji1", "emoji1", "emoji1", "emoji1"],
+            react: ["emoji1", "emoji2", "emoji3", "emoji4", "emoji5"],
+            _id_comment_reply: "",
+            _id_user: "2",
           },
           {
             _id: "2",
             texto: "comentario dos extra roles",
-            img: "",
+            img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/041/853/152/large/ivan-bautista-final-3.jpg`,
+            date: "28/01/2022",
             url: "",
-            react: ["emoji1", "emoji1", "emoji1", "emoji1", "emoji1"],
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "1",
+          },
+          {
+            _id: "3",
+            texto: "comentario tres extra roles",
+            img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/042/950/988/large/ivan-bautista-final-ghost.jpg`,
+            date: "28/01/2022",
+            url: "",
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "4",
+          },
+          {
+            _id: "4",
+            texto: "comentario cuatro extra roles",
+            img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/042/838/042/large/ivan-bautista-mictlantecuhtli.jpg?1635570709`,
+            date: "28/01/2022",
+            url: "",
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "3",
+          },
+          {
+            _id: "5",
+            texto: "comentario cinco extra roles",
+            img: `${cloudinaryFetch}https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Ghibli_Museum_06.jpg/220px-Ghibli_Museum_06.jpg`,
+            date: "28/01/2022",
+            url: "",
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "1",
+          },
+          {
+            _id: "6",
+            texto: "comentario seis extra roles",
+            img: `https://res.cloudinary.com/ivanrice-c/image/upload/c_fill,h_813,w_813/v1596740390/samples/food/dessert.jpg`,
+            date: "28/01/2022",
+            url: "",
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "3",
           },
         ],
       },
@@ -286,17 +371,24 @@ const commentsChannel = [
         comments: [
           {
             _id: "1",
-            texto: "anuncio uno",
+            texto: "comentario uno announcements",
             img: "",
+            date: "28/01/2022",
             url: "",
-            react: ["emoji1", "emoji1", "emoji1", "emoji1", "emoji1"],
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "2",
           },
           {
             _id: "2",
-            texto: "anuncio dos",
+            texto:
+              "comentario dos announcements sdkfjsjkdf d df df sdf sdfdsf f f sdfsdfsdf sdd",
             img: "",
+            date: "01/02/2022",
             url: "",
-            react: ["emoji1", "emoji1", "emoji1", "emoji1", "emoji1"],
+            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            _id_comment_reply: "",
+            _id_user: "1",
           },
         ],
       },
@@ -309,14 +401,13 @@ const commentsChannel = [
 const resolvers = {
   Query: {
     servers: () => servers,
-    findServer: (root, args)=>{
+    findServer: (root, args) => {
       const { _id } = args;
       const servidor = servers.find((server) => _id === server._id);
-      console.log("servidor ", servidor)
       return servidor;
     },
     findComment: (root, args) => {
-      const { _id_server, _id_channel} = args;
+      const { _id_server, _id_channel } = args;
 
       const server = commentsChannel.find((server) => {
         return server._id_server === _id_server;
@@ -327,7 +418,13 @@ const resolvers = {
       });
 
       return channels;
-    }
+    },
+  },
+  Comment: {
+     user: (comments) => {
+       const userf = users.filter((user) => user._id === comments._id_user);
+        return userf[0]
+    },
   },
 };
 
@@ -343,11 +440,10 @@ const startApolloServer = async(app, httpServer) =>{
   await server.start();
   server.applyMiddleware({ app });
   // The `listen` method launches a web server.
-  /*server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });*/
+  app.listen({ port: 4000 }, () =>
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  );
 }
 startApolloServer(app,httpServer)
-
 export default httpServer
 
