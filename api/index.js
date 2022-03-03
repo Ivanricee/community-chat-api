@@ -3,6 +3,7 @@ import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import http from "http"
 import express from "express"
 import cors from "cors"
+import { EmojisAPI } from "./emojis-api.js";
 
 const app = express()
 app.use(cors())
@@ -44,13 +45,18 @@ const typeDefs = gql`
     img: String
   }
   # comments querysable fields
+  type React {
+    unicode: String
+    count: Int
+    emoji: String
+  }
   type Comment {
     _id: ID
     texto: String
     img: String
     date: String
     url: String
-    react: [String]
+    react: [React]
     _id_comment_reply: ID
     _id_user: ID
     user: Users
@@ -60,6 +66,12 @@ const typeDefs = gql`
     title: String
     comments: [Comment]
   }
+  # Emojis api
+  type Emojis {
+    id: Int
+    emoji: String
+    unicode: String
+  }
 
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
@@ -67,8 +79,10 @@ const typeDefs = gql`
   # // Entry points
   type Query {
     servers: [Server]
+    getUsers: [Users]
     findServer(_id: ID!): Server
     findComment(_id_server: ID!, _id_channel: ID!): CComment
+    findEmojis(id: Int): Emojis
   }
 `;
 // 2 Data source
@@ -300,11 +314,17 @@ const commentsChannel = [
           {
             _id: "1",
             texto:
-              "Comentario uno asd f d s d f sdfsdfsdfsdfsd sdfsdfsd werwefsd  sdfsdfsdfsdf sdfsdfsdf ssf dfsdfsdfsdf sdfwgfdghgy j grgf e fgerfg",
+              "@otro userdfgf @otro 4 dfgdfg @ivanrice Comentario  Comen   Comentario  Comentario  Comentario tario   Comentario  Comentario  Comentario Comentario Comentario @asdf @ivanrice @Dr kuno asd f d s d f sdfsdfsdfsdfsd sdfsdfsd werwefsd  sdfsdfsdfsdf sdfsdfsdf ssf dfsdfsdfsdf sdfwgfdghgy j grgf e fgerfg",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg`,
             date: "28/01/2022",
-            url: "",
-            react: ["emoji1", "emoji2", "emoji3", "emoji4", "emoji5"],
+            url: "https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg",
+            react: [
+              { unicode: "1F601", count: 10, emoji: "😀" },
+              { unicode: "1F602", count: 11, emoji: "😁" },
+              { unicode: "1F603", count: 1, emoji: "👶" },
+              { unicode: "1F604", count: 2, emoji: "😂" },
+              { unicode: "1F605", count: 7, emoji: "🤣" },
+            ],
             _id_comment_reply: "",
             _id_user: "2",
           },
@@ -314,11 +334,17 @@ const commentsChannel = [
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/041/853/152/large/ivan-bautista-final-3.jpg`,
             date: "28/01/2022",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            react: [
+              { unicode: "1F601", count: 10, emoji: "😈" },
+              { unicode: "1F602", count: 11, emoji: "😺" },
+              { unicode: "1F603", count: 1, emoji: "👼" },
+              { unicode: "1F604", count: 2, emoji: "🍼" },
+              { unicode: "1F605", count: 7, emoji: "😀" },
+            ],
             _id_comment_reply: "",
             _id_user: "1",
           },
-          {
+            {
             _id: "3",
             texto: "comentario tres extra roles",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/042/950/988/large/ivan-bautista-final-ghost.jpg`,
@@ -375,7 +401,10 @@ const commentsChannel = [
             img: "",
             date: "28/01/2022",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            react: [
+              { unicode: "1F601", count: 10, emoji: "😈" },
+              { unicode: "1F605", count: 7, emoji: "😀" },
+            ],
             _id_comment_reply: "",
             _id_user: "2",
           },
@@ -386,7 +415,7 @@ const commentsChannel = [
             img: "",
             date: "01/02/2022",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
+            react: [{ unicode: "1F605", count: 7, emoji: "😀" }],
             _id_comment_reply: "",
             _id_user: "1",
           },
@@ -400,35 +429,42 @@ const commentsChannel = [
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    servers: () => servers,
-    findServer: (root, args) => {
+    servers: async () => await servers,
+    getUsers: async () => await users,
+    findServer: async (root, args) => {
       const { _id } = args;
-      const servidor = servers.find((server) => _id === server._id);
+      const servidor = await servers.find((server) => _id === server._id);
       return servidor;
     },
-    findComment: (root, args) => {
+    findComment: async (root, args) => {
       const { _id_server, _id_channel } = args;
 
-      const server = commentsChannel.find((server) => {
+      const server = await commentsChannel.find((server) => {
         return server._id_server === _id_server;
       });
 
-      const channels = server.channels.find((comment) => {
+      const channels = await server.channels.find((comment) => {
         return comment._id_channel === _id_channel;
       });
 
       return channels;
     },
+    findEmojis: async (_source, { id }, { dataSources }) => {
+      return await dataSources.emojisAPI.getEmoji(id);
+    },
   },
   Comment: {
-     user: (comments) => {
-       const userf = users.filter((user) => user._id === comments._id_user);
-        return userf[0]
+    user: async (comments) => {
+      const userf = await users.filter(
+        (user) => user._id === comments._id_user
+      );
+      return userf[0];
     },
   },
 };
 
 // 4
+
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const startApolloServer = async(app, httpServer) =>{
@@ -436,6 +472,11 @@ const startApolloServer = async(app, httpServer) =>{
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    dataSources: () =>{
+      return {
+        emojisAPI: new EmojisAPI(),
+      };
+    }
   });
   await server.start();
   server.applyMiddleware({ app });
