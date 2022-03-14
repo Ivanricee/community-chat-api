@@ -50,6 +50,14 @@ const typeDefs = gql`
     count: Int
     emoji: String
   }
+  type CommentReply {
+    _id: ID
+    role: String
+    nombre: String
+    texto: String
+    url: String
+    img: Boolean
+  }
   type Comment {
     _id: ID
     texto: String
@@ -57,8 +65,8 @@ const typeDefs = gql`
     date: String
     url: String
     react: [React]
-    _id_comment_reply: ID
     _id_user: ID
+    comment_reply: CommentReply
     user: Users
   }
   type CComment {
@@ -277,6 +285,28 @@ const servers = [
     ],
   },
 ];
+const roles = [
+  {
+    _id: "1",
+    _id_server: "1",
+    name: "ADMIN",
+  },
+  {
+    _id: "2",
+    _id_server: "1",
+    name: "BOT",
+  },
+  {
+    _id: "3",
+    _id_server: "1",
+    name: "MODERATORS",
+  },
+  {
+    _id: "4",
+    _id_server: "1",
+    name: "SUBS",
+  },
+];
 const users = [
   {
     _id: "1",
@@ -316,7 +346,7 @@ const commentsChannel = [
             texto:
               "@otro userdfgf @otro 4 dfgdfg @ivanrice Comentario  Comen   Comentario  Comentario  Comentario tario   Comentario  Comentario  Comentario Comentario Comentario @asdf @ivanrice @Dr kuno asd f d s d f sdfsdfsdfsdfsd sdfsdfsd werwefsd  sdfsdfsdfsdf sdfsdfsdf ssf dfsdfsdfsdf sdfwgfdghgy j grgf e fgerfg",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg`,
-            date: "28/01/2022",
+            date: "02/13/2019",
             url: "https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg",
             react: [
               { unicode: "1F601", count: 10, emoji: "😀" },
@@ -325,14 +355,37 @@ const commentsChannel = [
               { unicode: "1F604", count: 2, emoji: "😂" },
               { unicode: "1F605", count: 7, emoji: "🤣" },
             ],
-            _id_comment_reply: "",
             _id_user: "2",
+            comment_reply: {},
+          },
+          {
+            _id: "7",
+            texto: "comentario SIETE extra roles",
+            img: "",
+            date: "02/13/2020",
+            url: "",
+            react: [
+              { unicode: "1F603", count: 1, emoji: "👼" },
+              { unicode: "1F604", count: 2, emoji: "🍼" },
+              { unicode: "1F601", count: 10, emoji: "😈" },
+            ],
+            _id_comment_reply: "2",
+            _id_user: "3",
+            comment_reply: {
+              _id: "1",
+              role: "2",
+              nombre: "Dr k",
+              texto:
+                "@otro userdfgf @otro 4 dfgdfg @ivanrice Comentario  Comen   Comentario  Comentario  Comentario tario   Comentario  Comentario  Comentario Comentario Comentario @asdf @ivanrice @Dr kuno asd f d s d f sdfsdfsdfsdfsd sdfsdfsd werwefsd  sdfsdfsdfsdf sdfsdfsdf ssf dfsdfsdfsdf sdfwgfdghgy j grgf e fgerfg",
+              url: "https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg",
+              img: true,
+            },
           },
           {
             _id: "2",
             texto: "comentario dos extra roles",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/041/853/152/large/ivan-bautista-final-3.jpg`,
-            date: "28/01/2022",
+            date: "02/13/2020",
             url: "",
             react: [
               { unicode: "1F601", count: 10, emoji: "😈" },
@@ -341,48 +394,64 @@ const commentsChannel = [
               { unicode: "1F604", count: 2, emoji: "🍼" },
               { unicode: "1F605", count: 7, emoji: "😀" },
             ],
-            _id_comment_reply: "",
             _id_user: "1",
+            comment_reply: {},
           },
-            {
+          {
             _id: "3",
             texto: "comentario tres extra roles",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/042/950/988/large/ivan-bautista-final-ghost.jpg`,
-            date: "28/01/2022",
+            date: "02/14/2020",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
-            _id_comment_reply: "",
+            react: [
+              { unicode: "1F601", count: 10, emoji: "😈" },
+              { unicode: "1F603", count: 1, emoji: "👶" },
+              { unicode: "1F604", count: 2, emoji: "😂" },
+            ],
             _id_user: "4",
+            comment_reply: {},
           },
           {
             _id: "4",
             texto: "comentario cuatro extra roles",
             img: `${cloudinaryFetch}https://cdna.artstation.com/p/assets/images/images/042/838/042/large/ivan-bautista-mictlantecuhtli.jpg?1635570709`,
-            date: "28/01/2022",
+            date: "02/14/2020",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
-            _id_comment_reply: "",
+            react: [
+              { unicode: "1F601", count: 10, emoji: "😈" },
+              { unicode: "1F603", count: 1, emoji: "👶" },
+              { unicode: "1F602", count: 1, emoji: "👼" },
+              { unicode: "1F604", count: 2, emoji: "🍼" },
+              { unicode: "1F608", count: 2, emoji: "😂" },
+            ],
             _id_user: "3",
+            comment_reply: {},
           },
           {
             _id: "5",
             texto: "comentario cinco extra roles",
             img: `${cloudinaryFetch}https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Ghibli_Museum_06.jpg/220px-Ghibli_Museum_06.jpg`,
-            date: "28/01/2022",
+            date: "02/16/2020",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
-            _id_comment_reply: "",
+            react: [
+              { unicode: "1F603", count: 1, emoji: "👼" },
+              { unicode: "1F604", count: 2, emoji: "🍼" },
+            ],
             _id_user: "1",
+            comment_reply: {},
           },
           {
             _id: "6",
             texto: "comentario seis extra roles",
             img: `https://res.cloudinary.com/ivanrice-c/image/upload/c_fill,h_813,w_813/v1596740390/samples/food/dessert.jpg`,
-            date: "28/01/2022",
+            date: "02/17/2020",
             url: "",
-            react: ["emoji1", "emoji5", "emoji4", "emoji2", "emoji3"],
-            _id_comment_reply: "",
+            react: [
+              { unicode: "1F604", count: 2, emoji: "🍼" },
+              { unicode: "1F601", count: 10, emoji: "😈" },
+            ],
             _id_user: "3",
+            comment_reply: {},
           },
         ],
       },
@@ -405,7 +474,7 @@ const commentsChannel = [
               { unicode: "1F601", count: 10, emoji: "😈" },
               { unicode: "1F605", count: 7, emoji: "😀" },
             ],
-            _id_comment_reply: "",
+            comment_reply: {},
             _id_user: "2",
           },
           {
@@ -413,10 +482,10 @@ const commentsChannel = [
             texto:
               "comentario dos announcements sdkfjsjkdf d df df sdf sdfdsf f f sdfsdfsdf sdd",
             img: "",
-            date: "01/02/2022",
+            date: "28/01/2022",
             url: "",
             react: [{ unicode: "1F605", count: 7, emoji: "😀" }],
-            _id_comment_reply: "",
+            comment_reply: {},
             _id_user: "1",
           },
         ],
