@@ -37,12 +37,19 @@ const typeDefs = gql`
     channels: [Channel]
   }
   # users queryable fields
-
   type Users {
     _id: ID
-    name: String
     role: String
+    name: String
+    hash: String
+    state: Int
     img: String
+  }
+  type UsersRoles {
+    _id: ID
+    _id_server: ID
+    name: String
+    users: [Users]
   }
   # comments querysable fields
   type React {
@@ -86,6 +93,7 @@ const typeDefs = gql`
   # case, the "books" query returns an array of zero or more Books (defined above).
   # // Entry points
   type Query {
+    findUsersRoles(_id_server: ID!): [UsersRoles]
     servers: [Server]
     getUsers: [Users]
     findServer(_id: ID!): Server
@@ -310,26 +318,34 @@ const roles = [
 const users = [
   {
     _id: "1",
-    name: "ivanrice",
     role: "1",
-    img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
+    name: "ivanrice",
+    hash: "1875",
+    state: 1,
+    img: "https://res.cloudinary.com/ivanrice-c/image/upload/c_fill,e_brightness:47,h_48,o_100,w_48/v1598654998/fondo_landscape_hvk9j7.png",
   },
   {
     _id: "2",
-    name: "Dr k",
     role: "2",
+    name: "Dr k",
+    hash: "1876",
+    state: 2,
     img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
   },
   {
     _id: "3",
-    name: "otro user",
     role: "3",
+    name: "otro user",
+    hash: "1877",
+    state: 1,
     img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
   },
   {
     _id: "4",
-    name: "otro 4",
     role: "4",
+    name: "otro 4",
+    hash: "1878",
+    state: 1,
     img: "https://res.cloudinary.com/ivanrice-c/image/upload/f_auto,q_auto:good/v1642023517/discord-clone/server/ivnrice_logo_grzmki.png",
   },
 ];
@@ -498,6 +514,14 @@ const commentsChannel = [
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
+    findUsersRoles: async (root, args) => {
+      const { _id_server } = args;
+      const usersRoles = await roles.filter((role) => {
+        //console.log("idd ", _id_server);
+        return role._id_server === _id_server;
+      });
+      return usersRoles;
+    },
     servers: async () => await servers,
     getUsers: async () => await users,
     findServer: async (root, args) => {
@@ -528,6 +552,12 @@ const resolvers = {
         (user) => user._id === comments._id_user
       );
       return userf[0];
+    },
+  },
+  UsersRoles: {
+    users: async(role) => {
+      const usersinRole = await users.filter(user => user._id === role._id)
+      return usersinRole;
     },
   },
 };
