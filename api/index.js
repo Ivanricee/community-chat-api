@@ -739,28 +739,57 @@ const commentsChannel = [
         comments: [
           {
             _id: "1",
-            texto: "comentario uno announcements",
+            texto: "Welcome in yall, thank you for joining",
             img: "",
-            date: "28/01/2022",
-            url: "",
-            react: [
-              { unicode: "1F601", count: 10, emoji: "😈" },
-              { unicode: "1F605", count: 7, emoji: "😀" },
-            ],
-            comment_reply: {},
-            _id_user: "2",
-          },
-          {
-            _id: "2",
-            texto:
-              "comentario dos announcements sdkfjsjkdf d df df sdf sdfdsf f f sdfsdfsdf sdd",
-            img: "",
-            date: "28/01/2022",
+            date: "02/13/2019",
             url: "",
             react: [{ unicode: "1F605", count: 7, emoji: "😀" }],
             comment_reply: {},
-            _id_user: "1",
+            _id_user: "21",
           },
+          {
+            _id: "2",
+            texto: "Bienvenidos a todos",
+            img: `https://cdna.artstation.com/p/assets/images/images/044/565/274/large/ivan-bautista-christmas-snowman-psh.jpg`,
+            date: "02/13/2019",
+            url: "",
+            react: [
+              { unicode: "1F605", count: 7, emoji: "😀" },
+              { unicode: "1F604", count: 29, emoji: "😁" },
+            ],
+            comment_reply: {},
+            _id_user: "22",
+          },
+
+          {
+            _id: "3",
+            texto: "Hey all! Thanks for having me!",
+            img: `https://cdna.artstation.com/p/assets/images/images/042/950/988/large/ivan-bautista-final-ghost.jpg`,
+            date: "02/14/2019",
+            url: "",
+            react: [
+              { unicode: "1F605", count: 11, emoji: "😂" },
+              { unicode: "1F604", count: 13, emoji: "😁" },
+            ],
+            comment_reply: {},
+            _id_user: "26",
+          },
+        ],
+      },
+      {
+        _id_channel: "5",
+        title: "video/audio",
+        comments: [
+          {
+            _id: "",
+            texto: "",
+            img: "",
+            date: "",
+            url: "",
+            react: [],
+            comment_reply: {},
+            _id_user: "21",
+          }
         ],
       },
     ],
