@@ -21,10 +21,9 @@ const sendTokenResponse = (token, res) => {
 app.use(cors())
 app.use(express.json())
 app.post("/video/token", (req, res) => {
-  console.log("BOOOOOODD ",req.body)
     const identity = req.body.identity;
     const room = req.body.room;
-    const token = videoToken(identity, room, ENV.twilio);
+    const token = videoToken(identity, room, ENV);
     sendTokenResponse(token, res);
 });
 
@@ -1008,9 +1007,9 @@ const startApolloServer = async(app, httpServer) =>{
   await server.start();
   server.applyMiddleware({ app });
   // The `listen` method launches a web server.
-  app.listen({ port: ENV.app.port }, () =>
+  app.listen({ port: ENV.port }, () =>
     console.log(
-      `🚀 Server ready at http://localhost:${ENV.app.port}${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:${ENV.port}${server.graphqlPath}`
     )
   );
 }
