@@ -18,11 +18,13 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "graphql": "^16.2.0",
-    "undici": "^4.14.1"
+    "undici": "^4.14.1",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "twilio": "^3.77.0"
   },
   "devDependencies": {
     "consola": "^2.15.3",
-    "dotenv": "^14.2.0",
     "nodemon": "^2.0.15"
   }
 }

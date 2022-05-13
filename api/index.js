@@ -4,10 +4,29 @@ import http from "http"
 import express from "express"
 import cors from "cors"
 import { EmojisAPI } from "./emojis-api.js";
+import { ENV }  from './config.js'
+import { videoToken } from "./tokens.js";
 
 const app = express()
+
+const sendTokenResponse = (token, res) => {
+  res.set("Content-Type", "application/json");
+  res.send(
+    JSON.stringify({
+      token: token.toJwt(),
+    })
+  );
+};
+
 app.use(cors())
 app.use(express.json())
+app.post("/video/token", (req, res) => {
+  console.log("BOOOOOODD ",req.body)
+    const identity = req.body.identity;
+    const room = req.body.room;
+    const token = videoToken(identity, room, ENV.twilio);
+    sendTokenResponse(token, res);
+});
 
 const httpServer = http.createServer(app)
 
@@ -989,8 +1008,10 @@ const startApolloServer = async(app, httpServer) =>{
   await server.start();
   server.applyMiddleware({ app });
   // The `listen` method launches a web server.
-  app.listen({ port: 4000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  app.listen({ port: ENV.app.port }, () =>
+    console.log(
+      `🚀 Server ready at http://localhost:${ENV.app.port}${server.graphqlPath}`
+    )
   );
 }
 startApolloServer(app,httpServer)
