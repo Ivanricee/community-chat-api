@@ -8,7 +8,10 @@ import { ENV }  from './config.js'
 import { videoToken } from "./tokens.js";
 
 const app = express()
-
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 const sendTokenResponse = (token, res) => {
   res.set("Content-Type", "application/json");
   res.send(
@@ -20,11 +23,11 @@ const sendTokenResponse = (token, res) => {
 
 app.use(cors())
 app.use(express.json())
-app.post("/video/token", (req, res) => {
-    const identity = req.body.identity;
-    const room = req.body.room;
-    const token = videoToken(identity, room, ENV);
-    sendTokenResponse(token, res);
+app.post("/video/token", cors(corsOptions), (req, res) => {
+  const identity = req.body.identity;
+  const room = req.body.room;
+  const token = videoToken(identity, room, ENV);
+  sendTokenResponse(token, res);
 });
 
 const httpServer = http.createServer(app)
