@@ -9,7 +9,10 @@ import { videoToken } from "./tokens.js";
 
 const app = express()
 const corsOptions = {
-  origin: "*",
+  origin: [
+    "https://community-chat-discord.vercel.app/",
+    "http://localhost:3100",
+  ],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 const sendTokenResponse = (token, res) => {
