@@ -1,13 +1,13 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import http from "http"
-import express from "express"
-import cors from "cors"
+import http from "http";
+import express from "express";
+import cors from "cors";
 import { EmojisAPI } from "./emojis-api.js";
-import { ENV }  from './config.js'
+import { ENV } from "./config.js";
 import { videoToken } from "./tokens.js";
 
-const app = express()
+const app = express();
 const corsOptions = {
   origin: [
     "https://community-chat-discord.vercel.app/",
@@ -24,8 +24,8 @@ const sendTokenResponse = (token, res) => {
   );
 };
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 app.post("/video/token", cors(corsOptions), (req, res) => {
   const identity = req.body.identity;
   const room = req.body.room;
@@ -33,7 +33,7 @@ app.post("/video/token", cors(corsOptions), (req, res) => {
   sendTokenResponse(token, res);
 });
 
-const httpServer = http.createServer(app)
+const httpServer = http.createServer(app);
 
 // 1
 const typeDefs = gql`
@@ -126,7 +126,7 @@ const typeDefs = gql`
   }
 `;
 // 2 Data source
-const cloudinaryFetch ="https://res.cloudinary.com/demo/image/fetch/q_auto/";
+const cloudinaryFetch = "https://res.cloudinary.com/demo/image/fetch/q_auto/";
 const servers = [
   {
     _id: "1",
@@ -813,7 +813,7 @@ const commentsChannel = [
             react: [],
             comment_reply: {},
             _id_user: "21",
-          }
+          },
         ],
       },
     ],
@@ -968,11 +968,10 @@ const resolvers = {
       const server = await commentsChannel.find((server) => {
         return server._id_server === _id_server;
       });
-
+      if (typeof server === "undefined") return null;
       const channels = await server.channels.find((comment) => {
         return comment._id_channel === _id_channel;
       });
-
       return channels;
     },
     findEmojis: async (_source, { id }, { dataSources }) => {
@@ -988,8 +987,8 @@ const resolvers = {
     },
   },
   UsersRoles: {
-    users: async(role) => {
-      const usersinRole = await users.filter(user => user.role === role._id)
+    users: async (role) => {
+      const usersinRole = await users.filter((user) => user.role === role._id);
       return usersinRole;
     },
   },
@@ -999,16 +998,16 @@ const resolvers = {
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
-const startApolloServer = async(app, httpServer) =>{
+const startApolloServer = async (app, httpServer) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    dataSources: () =>{
+    dataSources: () => {
       return {
         emojisAPI: new EmojisAPI(),
       };
-    }
+    },
   });
   await server.start();
   server.applyMiddleware({ app });
@@ -1018,7 +1017,6 @@ const startApolloServer = async(app, httpServer) =>{
       `🚀 Server ready at http://localhost:${ENV.port}${server.graphqlPath}`
     )
   );
-}
-startApolloServer(app,httpServer)
-export default httpServer
-
+};
+startApolloServer(app, httpServer);
+export default httpServer;
