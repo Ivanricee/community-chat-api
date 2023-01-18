@@ -6,15 +6,59 @@ It's made with the Node JavaScript framework Express, GraphQl & Apollo Server.
 
 This api was created for educational purposes.
 
-## Available queries: 
+## API Reference
 
 Address: [https://community-chat-api.vercel.app/graphql](https://community-chat-api.vercel.app/graphql)
-- `findComment (id_server, id_channel)`: Returns comments from a channel.
-- `findEmojis (id)`: Returns an emoji.
-- `findServer`: Returns a server with channels info.
-- `findUsersRoles (id_server)`: Returns users and roles.
-- `getUsers`: Returns all users.
-- `servers`: Returns all servers
+
+#### Returns comments from a channel.
+
+```http
+  findComment 
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id_server` | `ID!` | **Required**. Server id     |
+| `id_channel` | `ID!` | **Required**. Channel id   |
+
+#### Returns an emoji.
+
+```http
+  findEmojis
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `ID!` | **Required**. Emoji id               |
+
+#### Returns a server with channels info.
+
+```http
+  findServer
+```
+
+#### Returns users and roles.
+
+```http
+  findUsersRoles
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id_server` | `ID!` | **Required**. Server id     |
+
+
+#### Returns all users.
+
+```http
+  getUsers
+```
+
+#### Returns all servers
+
+```http
+  servers
+```
 
 ## Technologies Used
 - NodeJs
