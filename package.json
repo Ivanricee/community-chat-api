@@ -16,10 +16,10 @@
     "apollo-server-core": "^3.6.2",
     "apollo-server-express": "^3.6.2",
     "cors": "^2.8.5",
-    "express": "^4.17.2",
+    "express": "^4.21.0",
     "graphql": "^16.2.0",
     "undici": "^4.14.1",
-    "body-parser": "^1.20.0",
+    "body-parser": "^1.20.3",
     "dotenv": "^16.0.1",
     "twilio": "^3.77.0"
   },
